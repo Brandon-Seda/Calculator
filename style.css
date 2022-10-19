@@ -6,8 +6,7 @@ body{
 
 
 .calculator-container {
-    height: 500px;
-    width: 600px;
+    height: 100vh;
 
     display: grid;
     justify-content: center;
@@ -16,9 +15,22 @@ body{
 
 .button-container{
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: 1fr repeat(4, 2fr);
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(6, 75px);
+    gap: 1px;
 
+}
+
+.text-field{
+    height: 100px;
+    font-size: 30px;
+    font-family: monospace;
+    background-color: rgba(20, 3, 3, 0.2);
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: end;
+    align-items: center;
+    padding-bottom: 10px;
 }
 
 button{
