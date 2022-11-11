@@ -1,14 +1,18 @@
-let displayVariable = "";
-let answer = "";
-let numberArr = []
-let operatorArr = [];
-let numberVar = "";
+let firstNum = "";
+let secondNum = "";
+let opertation = null;
+let reset = false;
 
-let textField = document.querySelector(".text-field");
-let numbers = document.getElementsByClassName("number");
-let operators = document.getElementsByClassName("operator");
-let clearBtn = document.querySelector("#clear");
-let deleteBtn = document.querySelector("#delete");
+
+const textFieldCurr = document.querySelector(".text-field-curr");
+const textFieldPrev = document.querySelector(".text-field-prev");
+const numbers = document.querySelectorAll('[data-number]');
+const operators = document.querySelectorAll('[data-operator]');
+const clearBtn = document.querySelector("#clear");
+const deleteBtn = document.querySelector("#delete");
+
+
+
 
 deleteBtn.addEventListener("click", function(){
     deleteNum();
@@ -19,83 +23,84 @@ clearBtn.addEventListener("click", function(){
     clearField();
 });
 
-for(let i = 0; i < numbers.length; i++){
-    
-    numbers[i].addEventListener("click", function(){
-        setDisplay(numbers[i].innerHTML);
-        displayVariable += numbers[i].innerHTML;
-        numberVar += numbers[i].innerHTML;
-        
 
-    })
+numbers.forEach((button) =>
+button.addEventListener('click', () => getNumber(button.textContent)))
+
+function getNumber(number){
+    if(textFieldCurr.textContent === '0' || reset){
+        resetTextField();
+    }
+    textFieldCurr.textContent += number;
+}
+
+function resetTextField(){
+    textFieldCurr.textContent = "";
+    reset = false;
 }
 
 
-for(let i = 0; i < operators.length; i++){
-    operators[i].addEventListener("click", function(){
-        if(operators[i].innerHTML != "="){
-            setDisplay(operators[i].innerHTML);
-            numberArr.push(numberVar);
-            operatorArr.push(operators[i].innerHTML); 
-            displayVariable += operators[i].innerHTML;
-        } 
-        else {
-            setDisplay(operators[i].innerHTML);
-            if(numberArr.length > 1){
-                numberArr.push(numberVar);
-                operate(operatorArr[0], numberArr[0], numberArr[1]);
-                numberArr.replace(numberArr[1], numberArr[2]);
-                numberArr[0] = answer;
-            }
-        }
-        console.log(numberArr)
-        console.log(operatorArr)
-        numberVar = "";
-    })
+operators.forEach((button) => 
+button.addEventListener('click', () => getOperator(button.textContent)))
+
+function getOperator(operator){
+    if(opertation !== null) evaluate()
+    firstNum = textFieldCurr.textContent
+    opertation = operator;
+    textFieldPrev.textContent = '${firstNum} ${operation}'
+
 }
 
+function evaluate(){
+    if(opertation === null || reset) return
+    if(opertation === "/" && textField.textContent === "0"){
+         return textFieldCurr.textContent = "Cannot divide by 0!"
+    }
+    secondNum = textFieldCurr.textContent;
+    textFieldCurr.textContent = operate(opertation, firstNum, secondNum)
 
-
+}
 
 
 function setDisplay(input){   
     if(input == "+" || input == "-" || input == "/" || input == "*"){
-        textField.innerHTML +=  (" " + input + " ");
+        textFieldCurr.textContent +=  (" " + input + " ");
     } else if(input == "="){
-        textField.innerHTML = answer;
+        console.log(answer)
+
+        textFieldCurr.textContent = answer;
         
     } else {
-        textField.innerHTML += input;
+        textFieldCurr.textContent += input;
     }
 }
 
-function add(a, b){
-    answer = a + b
-    return answer;
+function add(a, b){   
+    return a + b;
 }
 
-function subtract(a, b){
-    answer = (a - b);
-    return answer;
+function subtract(a, b){ 
+    return a - b;
 }
 
 function multiply(a, b){
-    answer = (a * b); 
-    return answer;
+     
+    return a * b;
 }
 
 function divide(a, b){
     if(b === 0){
-        answer =  "";
-        return answer;
+        return "NaN";
     } else {
-        answer = (a / b);
-        return answer;
+        return a / b;
     }
 }
 
 
 function operate(operator, a, b){
+    a = Number(a);
+    b = Number(b);
+
     switch (operator){
         case '+':
             return add(a, b);
@@ -106,7 +111,7 @@ function operate(operator, a, b){
         case "/":
             return divide(a, b);
         default:
-            return ""
+            return null
     }
 }
 
@@ -114,19 +119,15 @@ function operate(operator, a, b){
 function deleteNum(){
     if(displayVariable.length == 1){
         displayVariable = ""
-        textField.innerHTML = displayVariable;
+        textField.textContent = displayVariable;
     } 
-    
         displayVariable = displayVariable.slice(0, displayVariable.length-1);
-        textField.innerHTML = displayVariable;
-    
+        textField.textContent = displayVariable;
 }
 
 function clearField(){  
-    textField.innerHTML = "";
+    textField.textContent = "0";
     numberVar = ""
     answer = "";
-    numberArr = [];
-    operatorArr = [];
     displayVariable = ""
 }
