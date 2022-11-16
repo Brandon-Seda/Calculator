@@ -1,6 +1,6 @@
 let firstNum = "";
 let secondNum = "";
-let opertation = null;
+let operation = null;
 let reset = false;
 
 
@@ -10,17 +10,18 @@ const numbers = document.querySelectorAll('[data-number]');
 const operators = document.querySelectorAll('[data-operator]');
 const clearBtn = document.querySelector("#clear");
 const deleteBtn = document.querySelector("#delete");
-
-
-
+const point = document.querySelector(".point");
 
 deleteBtn.addEventListener("click", function(){
     deleteNum();
 });
 
-
 clearBtn.addEventListener("click", function(){
     clearField();
+});
+
+point.addEventListener("click", function(){
+    addPoint();
 });
 
 
@@ -44,36 +45,33 @@ operators.forEach((button) =>
 button.addEventListener('click', () => getOperator(button.textContent)))
 
 function getOperator(operator){
-    if(opertation !== null) evaluate()
+    if(operation !== null) evaluate()
     firstNum = textFieldCurr.textContent
-    opertation = operator;
-    textFieldPrev.textContent = '${firstNum} ${operation}'
+    operation = operator;
+    reset = true;
 
 }
 
 function evaluate(){
-    if(opertation === null || reset) return
-    if(opertation === "/" && textField.textContent === "0"){
+    if(operation === null || reset) return
+    if(operation === "/" && textField.textContent === "0"){
          return textFieldCurr.textContent = "Cannot divide by 0!"
     }
     secondNum = textFieldCurr.textContent;
-    textFieldCurr.textContent = operate(opertation, firstNum, secondNum)
+    textFieldCurr.textContent = operate(operation, firstNum, secondNum)
+    textFieldPrev.textContent = `${firstNum} ${operation} ${secondNum}`
+    operation = null;
+}   
 
-}
-
-
-function setDisplay(input){   
-    if(input == "+" || input == "-" || input == "/" || input == "*"){
-        textFieldCurr.textContent +=  (" " + input + " ");
-    } else if(input == "="){
-        console.log(answer)
-
-        textFieldCurr.textContent = answer;
-        
-    } else {
-        textFieldCurr.textContent += input;
+function addPoint(){
+    if(reset) resetTextField();
+    if(textFieldCurr.textContent === "") {
+        textFieldCurr.textContent = "0";
     }
+    if(textFieldCurr.textContent.includes(".")) return
+    textFieldCurr.textContent += ".";   
 }
+
 
 function add(a, b){   
     return a + b;
@@ -117,17 +115,13 @@ function operate(operator, a, b){
 
 
 function deleteNum(){
-    if(displayVariable.length == 1){
-        displayVariable = ""
-        textField.textContent = displayVariable;
-    } 
-        displayVariable = displayVariable.slice(0, displayVariable.length-1);
-        textField.textContent = displayVariable;
+    textFieldCurr.textContent = textFieldCurr.textContent.toString().slice(0, -1);
 }
 
 function clearField(){  
-    textField.textContent = "0";
-    numberVar = ""
-    answer = "";
-    displayVariable = ""
+    textFieldCurr.textContent = "0";
+    textFieldPrev.textContent = "";
+    firstNum, secondNum = "";
+    reset = false; 
+    operation = null;
 }

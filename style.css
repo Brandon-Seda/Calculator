@@ -13,7 +13,6 @@ body{
 
 .calculator-container {
     height: 100vh;
-
     display: grid;
     justify-content: center;
     align-content: center;
@@ -27,16 +26,21 @@ body{
 
 }
 
+.screen-text{
+    text-align: right;
+    word-wrap: break-word;
+    word-break: break-all;
+    background-color: rgba(135, 118, 118, 0.5);
+}
+
+.text-field-prev{
+    min-height: 32px;
+    font-size: 20px;
+}
+
 .text-field-curr{
-    height: 100px;
-    font-size: 30px;
-    font-family: monospace;
-    background-color: rgba(20, 3, 3, 0.2);
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: end;
-    align-items: center;
-    padding-bottom: 10px;
+    min-height: 64px;
+    font-size: 40px;
 }
 
 button{
