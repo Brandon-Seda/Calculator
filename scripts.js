@@ -53,14 +53,18 @@ function getOperator(operator){
 }
 
 function evaluate(){
-    if(operation === null || reset) return
-    if(operation === "/" && textField.textContent === "0"){
-         return textFieldCurr.textContent = "Cannot divide by 0!"
+    if(operation === null || reset || operation === "=") return
+    if(operation === "/" && textFieldCurr.textContent === "0"){
+        return textFieldCurr.textContent = "Undefined!"
     }
     secondNum = textFieldCurr.textContent;
     textFieldCurr.textContent = operate(operation, firstNum, secondNum)
-    textFieldPrev.textContent = `${firstNum} ${operation} ${secondNum}`
-    operation = null;
+    if(firstNum == "Undefined!"){
+        clearField();
+    } else {
+        textFieldPrev.textContent = `${firstNum} ${operation} ${secondNum}`
+        operation = null;
+    }   
 }   
 
 function addPoint(){
@@ -88,7 +92,7 @@ function multiply(a, b){
 
 function divide(a, b){
     if(b === 0){
-        return "NaN";
+        return "";
     } else {
         return a / b;
     }
